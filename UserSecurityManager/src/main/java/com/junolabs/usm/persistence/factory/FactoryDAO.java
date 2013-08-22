@@ -3,7 +3,7 @@ package com.junolabs.usm.persistence.factory;
 import com.junolabs.usm.persistence.dao.UserDAO;
 import com.junolabs.usm.persistence.dao.mysql.UserMySQLDAO;
 
-public class FactoryDAO {
+public class FactoryDAO{
 	
 	// --- Singleton ---
 	private static FactoryDAO INSTANCE = null;
