@@ -34,6 +34,8 @@ public class UserMySQLDAO implements UserDAO {
 
 	public User getById(long id) {
 		// TODO Auto-generated method stub
+		System.out.println("getById");
+		
 		return null;
 	}
 

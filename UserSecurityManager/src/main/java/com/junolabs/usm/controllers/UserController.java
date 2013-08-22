@@ -6,6 +6,8 @@ import java.io.PrintWriter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.junolabs.usm.model.User;
+import com.junolabs.usm.persistence.dao.mysql.UserMySQLDAO;
 import com.junolabs.usm.support.HTTPMethod;
 import com.junolabs.usm.support.MVCRequest;
 
@@ -13,11 +15,16 @@ public class UserController extends CRUDController {
        
     public UserController() {
         super();
+        System.out.println("constructor UserController");
     }
 
 	@Override
 	protected void renderShow(HttpServletRequest request, HttpServletResponse response) {
-
+		UserMySQLDAO userMySQLDAO = UserMySQLDAO.getInstance();
+		User user = userMySQLDAO.getById(1);
+		
+		System.out.println("renderShow");
+		System.out.println("==========");
 	}
 
 	@Override
