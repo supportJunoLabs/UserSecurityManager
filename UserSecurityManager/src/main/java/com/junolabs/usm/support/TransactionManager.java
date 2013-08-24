@@ -6,12 +6,12 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.junolabs.usm.persistence.dao.DAOManager;
-import com.junolabs.usm.persistence.dao.mysql.DAOManagerMySQL;
+import com.junolabs.usm.persistence.dao.ConnectionManager;
+import com.junolabs.usm.persistence.dao.mysql.ConnectionManagerMySQL;
 
 public class TransactionManager {
 	
-	private Map<HttpServletRequest, DAOManager> mapDAOManager;
+	private Map<HttpServletRequest, ConnectionManager> mapDAOManager;
 	
 	// --- Singleton ---
 	
@@ -19,15 +19,25 @@ public class TransactionManager {
 	 
     private TransactionManager() {}
  
-    private synchronized static void createInstance() {
+    private synchronized static void createInstance(HttpServletRequest request) throws Exception {
         if (INSTANCE == null) { 
             INSTANCE = new TransactionManager();
-            INSTANCE.mapDAOManager = new HashMap<HttpServletRequest, DAOManager>();
+            INSTANCE.mapDAOManager = new HashMap<HttpServletRequest, ConnectionManager>();
         }
+        
+        ConnectionManager daoManager;
+		try {
+			daoManager = new ConnectionManagerMySQL();
+			INSTANCE.mapDAOManager.put(request, daoManager);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new Exception(e.getMessage());
+		}
+		
     }
  
-    public static TransactionManager getInstance() {
-        createInstance();
+    public static TransactionManager getInstance(HttpServletRequest request) throws Exception {
+        createInstance(request);
         return INSTANCE;
     }
     
@@ -38,20 +48,6 @@ public class TransactionManager {
     
 	// --- -------- ---
 	// --- -------- ---
-    
-    public void init(HttpServletRequest request) throws Exception {
-    	DAOManager daoManager;
-		try {
-			daoManager = new DAOManagerMySQL();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new Exception(e.getMessage());
-		}
-		
-     	this.mapDAOManager.put(request, daoManager);
-    }
-    
-    // --- -------- ---
     
     public void initTransaction(HttpServletRequest request) throws Exception{
     	try {
@@ -89,6 +85,7 @@ public class TransactionManager {
     public void finish(HttpServletRequest request) throws Exception{
     	try {
 			this.mapDAOManager.get(request).getConnection().close();
+			this.mapDAOManager.remove(request);
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new Exception(e.getMessage());

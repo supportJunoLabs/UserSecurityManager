@@ -5,7 +5,6 @@ import java.util.List;
 public class System extends GenericEntity {
 	private String name;
 	private String code;
-	private String version;
 	private List<Option> options;
 	private List<Role> roles;
 	
@@ -20,12 +19,6 @@ public class System extends GenericEntity {
 	}
 	public void setCode(String code) {
 		this.code = code;
-	}
-	public String getVersion() {
-		return version;
-	}
-	public void setVersion(String version) {
-		this.version = version;
 	}
 	public List<Option> getOptions() {
 		return options;

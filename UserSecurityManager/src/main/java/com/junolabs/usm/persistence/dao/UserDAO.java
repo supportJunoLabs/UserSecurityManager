@@ -11,7 +11,7 @@ public interface UserDAO extends AbstractDAO  {
 	User getByAccountName(String email);
 	List<User> getAll();
 	
-	User create(User user);
+	User create(User user) throws Exception;
 	User update(User user);
 	void delete(long id);
 }

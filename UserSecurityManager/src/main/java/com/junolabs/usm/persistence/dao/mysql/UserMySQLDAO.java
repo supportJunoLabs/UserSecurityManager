@@ -1,8 +1,11 @@
 package com.junolabs.usm.persistence.dao.mysql;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
 
 import com.junolabs.usm.model.User;
+import com.junolabs.usm.persistence.dao.ConnectionManager;
 import com.junolabs.usm.persistence.dao.UserDAO;
 
 public class UserMySQLDAO implements UserDAO {
@@ -54,8 +57,20 @@ public class UserMySQLDAO implements UserDAO {
 		return null;
 	}
 
-	public User create(User user) {
-		// TODO Auto-generated method stub
+	public User create(User user) throws Exception {
+		try {
+			ConnectionManager connectionManager = new ConnectionManagerMySQL();
+			
+			Connection connection = connectionManager.getConnection();
+			
+			//connection.
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw new Exception();
+		}
+
 		return null;
 	}
 
