@@ -2,6 +2,7 @@ package com.junolabs.usm.persistence.dao.mysql;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
@@ -65,34 +66,36 @@ public class UserMySQLDAO implements UserDAO {
 			ConnectionManager connectionManager = new ConnectionManagerMySQL();
 			Connection conn = connectionManager.getConnection();
 			
-			PreparedStatement ps = conn.prepareStatement(
-					   "insert into user values (null,?,?,?,?,?)",
-					   PreparedStatement.RETURN_GENERATED_KEYS);
+			PreparedStatement ps = conn.prepareStatement("insert into user values (null,?,?,?,?,?)", PreparedStatement.RETURN_GENERATED_KEYS);
 			
 			ps.setString(1, user.getFirstName());
 			ps.setString(2, user.getLastName());
 			ps.setString(3, user.getEmail());
 			java.sql.Date sqlDate = new java.sql.Date(user.getBirthDate().getTime());
 			ps.setDate(4, sqlDate);
-			if (account != null){
-				ps.setLong(5, account.getId());
+			if (user.getAccount() != null){
+				ps.setLong(5, user.getAccount().getId());
 			}
-			else{
-				ps.setLong(null);
-			}
+//			else{
+//				ps.setLong(null);
+//			}
 			
 			ps.executeUpdate();
 			
-			
-			//connection.
+			ResultSet rs = ps.getGeneratedKeys();
+			int generatedKey = 0;
+			while (rs.next()) {
+			   generatedKey = rs.getInt(1);
+			}
+			user.setId(generatedKey);
+
+			return user;
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			throw new Exception();
 		}
-
-		return null;
 	}
 
 	public User update(User user) {
