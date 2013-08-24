@@ -1,9 +1,12 @@
 package com.junolabs.usm.persistence.dao.mysql;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 
+import com.junolabs.usm.model.Account;
 import com.junolabs.usm.model.User;
 import com.junolabs.usm.persistence.dao.ConnectionManager;
 import com.junolabs.usm.persistence.dao.UserDAO;
@@ -60,8 +63,26 @@ public class UserMySQLDAO implements UserDAO {
 	public User create(User user) throws Exception {
 		try {
 			ConnectionManager connectionManager = new ConnectionManagerMySQL();
+			Connection conn = connectionManager.getConnection();
 			
-			Connection connection = connectionManager.getConnection();
+			PreparedStatement ps = conn.prepareStatement(
+					   "insert into user values (null,?,?,?,?,?)",
+					   PreparedStatement.RETURN_GENERATED_KEYS);
+			
+			ps.setString(1, user.getFirstName());
+			ps.setString(2, user.getLastName());
+			ps.setString(3, user.getEmail());
+			java.sql.Date sqlDate = new java.sql.Date(user.getBirthDate().getTime());
+			ps.setDate(4, sqlDate);
+			if (account != null){
+				ps.setLong(5, account.getId());
+			}
+			else{
+				ps.setLong(null);
+			}
+			
+			ps.executeUpdate();
+			
 			
 			//connection.
 			

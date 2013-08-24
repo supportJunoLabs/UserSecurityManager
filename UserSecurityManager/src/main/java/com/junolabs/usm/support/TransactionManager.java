@@ -51,8 +51,9 @@ public class TransactionManager {
     
     public void initTransaction(HttpServletRequest request) throws Exception{
     	try {
-			this.mapDAOManager.get(request).getConnection().setAutoCommit(true);
+			this.mapDAOManager.get(request).getConnection().setAutoCommit(false);
 		} catch (SQLException e) {
+			this.mapDAOManager.get(request).getConnection().setAutoCommit(true);
 			e.printStackTrace();
 			throw new Exception(e.getMessage());
 		}
@@ -67,6 +68,9 @@ public class TransactionManager {
 			e.printStackTrace();
 			throw new Exception(e.getMessage());
 		}
+    	finally{
+    		this.mapDAOManager.get(request).getConnection().setAutoCommit(true);
+    	}
     }
     
     // --- -------- ---
@@ -78,6 +82,9 @@ public class TransactionManager {
 			e.printStackTrace();
 			throw new Exception(e.getMessage());
 		}
+    	finally{
+    		this.mapDAOManager.get(request).getConnection().setAutoCommit(true);
+    	}
     }
     
     // --- -------- ---
