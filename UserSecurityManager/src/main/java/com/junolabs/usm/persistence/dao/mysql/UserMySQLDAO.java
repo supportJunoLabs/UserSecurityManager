@@ -4,15 +4,20 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.Date;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
 
 import com.junolabs.usm.model.Account;
 import com.junolabs.usm.model.User;
 import com.junolabs.usm.persistence.dao.ConnectionManager;
+import com.junolabs.usm.persistence.dao.TransactionManagerDAO;
 import com.junolabs.usm.persistence.dao.UserDAO;
+import com.junolabs.usm.support.TransactionManager;
 
-public class UserMySQLDAO implements UserDAO {
+public class UserMySQLDAO extends UserDAO {
 	
 	// --- Singleton ---
 	
@@ -39,46 +44,40 @@ public class UserMySQLDAO implements UserDAO {
 	// --- -------- ---
 	// --- -------- ---
 
-	public User getById(long id) {
+	public User getById(long id, HttpServletRequest request) {
 		// TODO Auto-generated method stub
 		System.out.println("getById");
 		
 		return null;
 	}
 
-	public User getByEmail(String email) {
+	public User getByEmail(String email, HttpServletRequest request) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public User getByAccountName(String email) {
+	public User getByAccountName(String email, HttpServletRequest request) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public List<User> getAll() {
+	public List<User> getAll(HttpServletRequest request) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public User create(User user) throws Exception {
+	public User create(User user, HttpServletRequest request) throws Exception {
 		try {
-			ConnectionManager connectionManager = new ConnectionManagerMySQL();
-			Connection conn = connectionManager.getConnection();
+			TransactionManagerDAO transactionManagerDAO = TransactionManager.getInstance(request);
+			Connection conn = transactionManagerDAO.getConnection(request);
 			
-			PreparedStatement ps = conn.prepareStatement("insert into user values (null,?,?,?,?,?)", PreparedStatement.RETURN_GENERATED_KEYS);
+			
+			PreparedStatement ps = conn.prepareStatement("insert into users (FIRST_NAME, LAST_NAME, EMAIL, BIRTH_DATE) values (?,?,?,?)", PreparedStatement.RETURN_GENERATED_KEYS);
 			
 			ps.setString(1, user.getFirstName());
 			ps.setString(2, user.getLastName());
 			ps.setString(3, user.getEmail());
-			java.sql.Date sqlDate = new java.sql.Date(user.getBirthDate().getTime());
-			ps.setDate(4, sqlDate);
-			if (user.getAccount() != null){
-				ps.setLong(5, user.getAccount().getId());
-			}
-//			else{
-//				ps.setLong(null);
-//			}
+			ps.setDate(4, new java.sql.Date(user.getBirthDate().getTime()));
 			
 			ps.executeUpdate();
 			
@@ -98,12 +97,12 @@ public class UserMySQLDAO implements UserDAO {
 		}
 	}
 
-	public User update(User user) {
+	public User update(User user, HttpServletRequest request) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public void delete(long id) {
+	public void delete(long id, HttpServletRequest request) {
 		// TODO Auto-generated method stub
 		
 	}

@@ -1,5 +1,6 @@
 package com.junolabs.usm.support;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
@@ -7,9 +8,11 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import com.junolabs.usm.persistence.dao.ConnectionManager;
+import com.junolabs.usm.persistence.dao.TransactionManagerDAO;
 import com.junolabs.usm.persistence.dao.mysql.ConnectionManagerMySQL;
+import com.junolabs.usm.services.TransactionManagerService;
 
-public class TransactionManager {
+public class TransactionManager implements TransactionManagerService, TransactionManagerDAO  {
 	
 	private Map<HttpServletRequest, ConnectionManager> mapDAOManager;
 	
@@ -27,8 +30,10 @@ public class TransactionManager {
         
         ConnectionManager daoManager;
 		try {
-			daoManager = new ConnectionManagerMySQL();
-			INSTANCE.mapDAOManager.put(request, daoManager);
+			if (!INSTANCE.mapDAOManager.containsKey(request)){
+				daoManager = new ConnectionManagerMySQL();
+				INSTANCE.mapDAOManager.put(request, daoManager);
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new Exception(e.getMessage());
@@ -53,8 +58,8 @@ public class TransactionManager {
     	try {
 			this.mapDAOManager.get(request).getConnection().setAutoCommit(false);
 		} catch (SQLException e) {
-			this.mapDAOManager.get(request).getConnection().setAutoCommit(true);
 			e.printStackTrace();
+			this.mapDAOManager.get(request).getConnection().setAutoCommit(true);
 			throw new Exception(e.getMessage());
 		}
     }
@@ -98,6 +103,13 @@ public class TransactionManager {
 			throw new Exception(e.getMessage());
 		}
     }
+
+    //--------------------------------------------------------------------------------
+  //--------------------------------------------------------------------------------
+    
+	public Connection getConnection(HttpServletRequest request) throws Exception {
+		return this.mapDAOManager.get(request).getConnection();
+	}
     
     // --- -------- ---
 }

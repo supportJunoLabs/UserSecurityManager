@@ -42,23 +42,23 @@ public class AccountManagerService extends Service {
 	// --- -------- ---
 	// --- -------- ---
 	
-	private void createAccount(Account account, HttpServletRequest request) throws Exception {
+	public void createAccount(Account account, HttpServletRequest request) throws Exception {
 		
 		try{
-			this.transactionManager = TransactionManager.getInstance(request);
-			this.transactionManager.initTransaction(request);
+			this.transactionManagerService = TransactionManager.getInstance(request);
+			this.transactionManagerService.initTransaction(request);
 			
-			User createdUser = userDAO.create(account.getUser());
+			User createdUser = userDAO.create(account.getUser(), request);
 			account.setUser(createdUser);
-			Account createdAccount = accountDAO.create(account);
+			Account createdAccount = accountDAO.create(account, request);
 			
-			this.transactionManager.commitTransaction(request);
+			this.transactionManagerService.commitTransaction(request);
 		}
 		catch (Exception exc){
-			this.transactionManager.rollbackTransaction(request);
+			this.transactionManagerService.rollbackTransaction(request);
 		}
 		finally{
-			this.transactionManager.finish(request);
+			this.transactionManagerService.finish(request);
 		}
 	}
 	

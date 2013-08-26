@@ -1,5 +1,6 @@
 package com.junolabs.usm.persistence.dao;
 
-public interface AbstractDAO {
 
+public abstract class AbstractDAO {
+	protected TransactionManagerDAO transactionManagerDAO;
 }

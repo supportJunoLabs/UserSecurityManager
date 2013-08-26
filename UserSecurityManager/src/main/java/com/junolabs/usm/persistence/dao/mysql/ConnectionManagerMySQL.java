@@ -21,7 +21,13 @@ public class ConnectionManagerMySQL implements ConnectionManager {
 		    connectionProps.put("user", "root");
 		    connectionProps.put("password", "abc123");
 		    
-		    this.connection = DriverManager.getConnection("jdbc:mysql://localhosr:3306", connectionProps);
+		    try {
+				Class.forName("com.mysql.jdbc.Driver");
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} 
+		    this.connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/usm", connectionProps);
 		}
 		return connection;
 	}

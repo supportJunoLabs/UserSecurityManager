@@ -2,12 +2,15 @@ package com.junolabs.usm.controllers;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.junolabs.usm.model.Account;
 import com.junolabs.usm.model.User;
 import com.junolabs.usm.persistence.dao.mysql.UserMySQLDAO;
+import com.junolabs.usm.services.AccountManagerService;
 import com.junolabs.usm.support.HTTPMethod;
 import com.junolabs.usm.support.MVCRequest;
 
@@ -20,11 +23,28 @@ public class UserController extends CRUDController {
 
 	@Override
 	protected void renderShow(HttpServletRequest request, HttpServletResponse response) {
-		UserMySQLDAO userMySQLDAO = UserMySQLDAO.getInstance();
-		User user = userMySQLDAO.getById(1);
-		
 		System.out.println("renderShow");
 		System.out.println("==========");
+		
+		AccountManagerService accountManagerService = AccountManagerService.getInstance();
+		
+		User user = new User();
+		user.setFirstName("Leandro");
+		user.setLastName("Carrasco");
+		user.setBirthDate(new Date());
+		user.setEmail("a@b.com");
+		
+		Account account = new Account();
+		account.setName("lcarrasco");
+		account.setPassword("abc123");
+		account.setUser(user);
+		
+		try {
+			accountManagerService.createAccount(account, request);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@Override
