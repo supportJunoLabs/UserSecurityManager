@@ -55,6 +55,7 @@ public class AccountManagerService extends Service {
 			this.transactionManagerService.commitTransaction(request);
 		}
 		catch (Exception exc){
+			exc.printStackTrace();
 			this.transactionManagerService.rollbackTransaction(request);
 		}
 		finally{

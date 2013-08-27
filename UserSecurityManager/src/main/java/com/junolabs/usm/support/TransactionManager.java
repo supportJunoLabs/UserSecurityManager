@@ -14,7 +14,8 @@ import com.junolabs.usm.services.TransactionManagerService;
 
 public class TransactionManager implements TransactionManagerService, TransactionManagerDAO  {
 	
-	private Map<HttpServletRequest, ConnectionManager> mapDAOManager;
+	//private Map<HttpServletRequest, ConnectionManager> mapDAOManager;
+	private Map<Long, ConnectionManager> mapDAOManager;
 	
 	// --- Singleton ---
 	
@@ -25,14 +26,20 @@ public class TransactionManager implements TransactionManagerService, Transactio
     private synchronized static void createInstance(HttpServletRequest request) throws Exception {
         if (INSTANCE == null) { 
             INSTANCE = new TransactionManager();
-            INSTANCE.mapDAOManager = new HashMap<HttpServletRequest, ConnectionManager>();
+            // INSTANCE.mapDAOManager = new HashMap<HttpServletRequest, ConnectionManager>();
+            INSTANCE.mapDAOManager = new HashMap<Long, ConnectionManager>();
         }
+        
+        long idCurrentTread = Thread.currentThread().getId();
         
         ConnectionManager daoManager;
 		try {
-			if (!INSTANCE.mapDAOManager.containsKey(request)){
+			//if (!INSTANCE.mapDAOManager.containsKey(request)){
+			if (!INSTANCE.mapDAOManager.containsKey(idCurrentTread)){
 				daoManager = new ConnectionManagerMySQL();
-				INSTANCE.mapDAOManager.put(request, daoManager);
+				//INSTANCE.mapDAOManager.put(request, daoManager);
+				
+				INSTANCE.mapDAOManager.put(idCurrentTread, daoManager);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -55,11 +62,14 @@ public class TransactionManager implements TransactionManagerService, Transactio
 	// --- -------- ---
     
     public void initTransaction(HttpServletRequest request) throws Exception{
+    	long idCurrentTread = Thread.currentThread().getId();
     	try {
-			this.mapDAOManager.get(request).getConnection().setAutoCommit(false);
+			//this.mapDAOManager.get(request).getConnection().setAutoCommit(false);
+    		this.mapDAOManager.get(idCurrentTread).getConnection().setAutoCommit(false);
 		} catch (SQLException e) {
 			e.printStackTrace();
-			this.mapDAOManager.get(request).getConnection().setAutoCommit(true);
+			//this.mapDAOManager.get(request).getConnection().setAutoCommit(true);
+			this.mapDAOManager.get(idCurrentTread).getConnection().setAutoCommit(true);
 			throw new Exception(e.getMessage());
 		}
     }
@@ -67,37 +77,46 @@ public class TransactionManager implements TransactionManagerService, Transactio
     // --- -------- ---
     
     public void commitTransaction(HttpServletRequest request) throws Exception{
+    	long idCurrentTread = Thread.currentThread().getId();
     	try {
-			this.mapDAOManager.get(request).getConnection().commit();
+    		//this.mapDAOManager.get(request).getConnection().commit();
+    		this.mapDAOManager.get(idCurrentTread).getConnection().commit();
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new Exception(e.getMessage());
 		}
     	finally{
-    		this.mapDAOManager.get(request).getConnection().setAutoCommit(true);
+    		//this.mapDAOManager.get(request).getConnection().setAutoCommit(true);
+    		this.mapDAOManager.get(idCurrentTread).getConnection().setAutoCommit(true);
     	}
     }
     
     // --- -------- ---
     
     public void rollbackTransaction(HttpServletRequest request) throws Exception{
+    	long idCurrentTread = Thread.currentThread().getId();
     	try {
-			this.mapDAOManager.get(request).getConnection().rollback();
+			//this.mapDAOManager.get(request).getConnection().rollback();
+    		this.mapDAOManager.get(idCurrentTread).getConnection().rollback();
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new Exception(e.getMessage());
 		}
     	finally{
-    		this.mapDAOManager.get(request).getConnection().setAutoCommit(true);
+    		//this.mapDAOManager.get(request).getConnection().setAutoCommit(true);
+    		this.mapDAOManager.get(idCurrentTread).getConnection().setAutoCommit(true);
     	}
     }
     
     // --- -------- ---
     
     public void finish(HttpServletRequest request) throws Exception{
+    	long idCurrentTread = Thread.currentThread().getId();
     	try {
-			this.mapDAOManager.get(request).getConnection().close();
-			this.mapDAOManager.remove(request);
+			//this.mapDAOManager.get(request).getConnection().close();
+    		//this.mapDAOManager.remove(request);
+    		this.mapDAOManager.get(idCurrentTread).getConnection().close();
+			this.mapDAOManager.remove(idCurrentTread);
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new Exception(e.getMessage());
@@ -108,7 +127,8 @@ public class TransactionManager implements TransactionManagerService, Transactio
   //--------------------------------------------------------------------------------
     
 	public Connection getConnection(HttpServletRequest request) throws Exception {
-		return this.mapDAOManager.get(request).getConnection();
+		long idCurrentTread = Thread.currentThread().getId();
+		return this.mapDAOManager.get(idCurrentTread).getConnection();
 	}
     
     // --- -------- ---
