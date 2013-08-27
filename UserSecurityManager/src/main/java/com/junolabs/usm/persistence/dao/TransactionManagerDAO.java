@@ -5,5 +5,5 @@ import java.sql.Connection;
 import javax.servlet.http.HttpServletRequest;
 
 public interface TransactionManagerDAO {
-	public Connection getConnection(HttpServletRequest request) throws Exception;
+	public Connection getConnection() throws Exception;
 }

@@ -40,17 +40,17 @@ public class AccountMySQLDAO extends AccountDAO {
 	// --- -------- ---
 	// --- -------- ---
 	
-	public Account getById(long id, HttpServletRequest request) {
+	public Account getById(long id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public Account getByEmail(String email, HttpServletRequest request) {
+	public Account getByEmail(String email) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public Account getByAccountName(String email, HttpServletRequest request) {
+	public Account getByAccountName(String email) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -60,10 +60,10 @@ public class AccountMySQLDAO extends AccountDAO {
 		return null;
 	}
 
-	public Account create(Account account, HttpServletRequest request) throws Exception {
+	public Account create(Account account) throws Exception {
 		try {
-			TransactionManagerDAO transactionManagerDAO = TransactionManager.getInstance(request);
-			Connection conn = transactionManagerDAO.getConnection(request);
+			TransactionManagerDAO transactionManagerDAO = TransactionManager.getInstance();
+			Connection conn = transactionManagerDAO.getConnection();
 			
 			
 			PreparedStatement ps = conn.prepareStatement("insert into accounts (NAME, PASSWORD, USER) values (?,?,?)", PreparedStatement.RETURN_GENERATED_KEYS);
@@ -90,12 +90,12 @@ public class AccountMySQLDAO extends AccountDAO {
 		}
 	}
 
-	public Account update(Account account, HttpServletRequest request) {
+	public Account update(Account account) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public void delete(long id, HttpServletRequest request) {
+	public void delete(long id) {
 		// TODO Auto-generated method stub
 		
 	}

@@ -40,7 +40,7 @@ public class UserController extends CRUDController {
 		account.setUser(user);
 		
 		try {
-			accountManagerService.createAccount(account, request);
+			accountManagerService.createAccount(account);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

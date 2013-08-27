@@ -44,19 +44,19 @@ public class UserMySQLDAO extends UserDAO {
 	// --- -------- ---
 	// --- -------- ---
 
-	public User getById(long id, HttpServletRequest request) {
+	public User getById(long id) {
 		// TODO Auto-generated method stub
 		System.out.println("getById");
 		
 		return null;
 	}
 
-	public User getByEmail(String email, HttpServletRequest request) {
+	public User getByEmail(String email) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public User getByAccountName(String email, HttpServletRequest request) {
+	public User getByAccountName(String email) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -66,10 +66,10 @@ public class UserMySQLDAO extends UserDAO {
 		return null;
 	}
 
-	public User create(User user, HttpServletRequest request) throws Exception {
+	public User create(User user) throws Exception {
 		try {
-			TransactionManagerDAO transactionManagerDAO = TransactionManager.getInstance(request);
-			Connection conn = transactionManagerDAO.getConnection(request);
+			TransactionManagerDAO transactionManagerDAO = TransactionManager.getInstance();
+			Connection conn = transactionManagerDAO.getConnection();
 			
 			
 			PreparedStatement ps = conn.prepareStatement("insert into users (FIRST_NAME, LAST_NAME, EMAIL, BIRTH_DATE) values (?,?,?,?)", PreparedStatement.RETURN_GENERATED_KEYS);
@@ -97,12 +97,12 @@ public class UserMySQLDAO extends UserDAO {
 		}
 	}
 
-	public User update(User user, HttpServletRequest request) {
+	public User update(User user) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public void delete(long id, HttpServletRequest request) {
+	public void delete(long id) {
 		// TODO Auto-generated method stub
 		
 	}
