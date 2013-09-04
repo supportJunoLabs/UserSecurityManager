@@ -37,7 +37,7 @@ public class DispatcherCRUDServlet extends HttpServlet {
 	private void proccessRequest(HTTPMethod httpMethod, HttpServletRequest request, HttpServletResponse response){
 		
 		
-		MVCRequest mvcRequest = getMVCRequest(request);
+		MVCRequest mvcRequest = this.getMVCRequest(request);
 		
 			try {
 				String className = PACKAGE + mvcRequest.getController() + CONTROLLER;

@@ -1,7 +1,5 @@
 package com.junolabs.usm.services;
 
-import javax.servlet.http.HttpServletRequest;
-
 public interface TransactionManagerService {
 	public void initTransaction() throws Exception;
     public void commitTransaction() throws Exception;

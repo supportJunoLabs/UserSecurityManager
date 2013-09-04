@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.junolabs.usm.model.Account;
 import com.junolabs.usm.model.User;
-import com.junolabs.usm.persistence.dao.mysql.UserMySQLDAO;
 import com.junolabs.usm.services.AccountManagerService;
 import com.junolabs.usm.support.HTTPMethod;
 import com.junolabs.usm.support.MVCRequest;
