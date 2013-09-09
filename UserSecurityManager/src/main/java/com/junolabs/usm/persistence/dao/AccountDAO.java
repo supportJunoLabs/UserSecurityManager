@@ -12,7 +12,7 @@ public abstract class AccountDAO extends AbstractDAO {
 	public abstract Account getByAccountName(String email);
 	public abstract List<Account> getAll(HttpServletRequest request);
 	
-	public abstract Account create(Account account) throws Exception;
+	public abstract Account create(Account account);
 	public abstract Account update(Account account);
 	public abstract void delete(long id);
 }

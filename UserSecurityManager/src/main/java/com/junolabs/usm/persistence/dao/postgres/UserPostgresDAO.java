@@ -1,18 +1,14 @@
 package com.junolabs.usm.persistence.dao.postgres;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Types;
-import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.junolabs.usm.model.Account;
 import com.junolabs.usm.model.User;
-import com.junolabs.usm.persistence.dao.ConnectionManager;
+import com.junolabs.usm.persistence.dao.IConnectionManager;
 import com.junolabs.usm.persistence.dao.TransactionManagerDAO;
 import com.junolabs.usm.persistence.dao.UserDAO;
 import com.junolabs.usm.support.TransactionManager;
@@ -69,7 +65,7 @@ public class UserPostgresDAO extends UserDAO {
 	public User create(User user) throws Exception {
 		try {
 			TransactionManagerDAO transactionManagerDAO = TransactionManager.getInstance();
-			Connection conn = transactionManagerDAO.getConnection();
+			IConnectionManager conn = transactionManagerDAO.getConnectionManager();
 			
 			
 			PreparedStatement ps = conn.prepareStatement("INSERT INTO \"USERS\" (\"FIRST_NAME\", \"LAST_NAME\", \"EMAIL\", \"BIRTH_DATE\") VALUES (?,?,?,?)", PreparedStatement.RETURN_GENERATED_KEYS);

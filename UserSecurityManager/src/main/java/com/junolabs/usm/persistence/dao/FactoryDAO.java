@@ -10,7 +10,7 @@ public abstract class FactoryDAO{
 	
 	private static String DATA_BASE_MANAGER = MYSQL;
 	
-	public abstract ConnectionManager getConnectionManager();
+	public abstract IConnectionManager getConnectionManager();
     public abstract UserDAO getUserDAO();
     public abstract AccountDAO getAccountDAO();
     

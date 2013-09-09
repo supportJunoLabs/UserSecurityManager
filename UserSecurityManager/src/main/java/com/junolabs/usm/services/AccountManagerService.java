@@ -5,7 +5,6 @@ import com.junolabs.usm.model.User;
 import com.junolabs.usm.persistence.dao.AccountDAO;
 import com.junolabs.usm.persistence.dao.FactoryDAO;
 import com.junolabs.usm.persistence.dao.UserDAO;
-import com.junolabs.usm.persistence.dao.mysql.FactoryMySQLDAO;
 import com.junolabs.usm.support.TransactionManager;
 
 public class AccountManagerService extends Service {
@@ -22,8 +21,6 @@ public class AccountManagerService extends Service {
     private synchronized static void createInstance(){
         if (INSTANCE == null) { 
             INSTANCE = new AccountManagerService();
-//            INSTANCE.userDAO = UserMySQLDAO.getInstance();
-//            INSTANCE.accountDAO = AccountMySQLDAO.getInstance();
             INSTANCE.userDAO = FactoryDAO.getFactoryDAO().getUserDAO();
             INSTANCE.accountDAO = FactoryDAO.getFactoryDAO().getAccountDAO();
         }			
@@ -42,7 +39,7 @@ public class AccountManagerService extends Service {
 	// --- -------- ---
 	// --- -------- ---
 	
-	public void createAccount(Account account) throws Exception {
+	public void createAccount(Account account) {
 		
 		try{
 			this.transactionManagerService = TransactionManager.getInstance();

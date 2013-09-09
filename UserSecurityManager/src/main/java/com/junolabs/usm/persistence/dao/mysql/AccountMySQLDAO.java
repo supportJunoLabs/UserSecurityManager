@@ -1,6 +1,5 @@
 package com.junolabs.usm.persistence.dao.mysql;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -8,8 +7,10 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.junolabs.usm.exceptions.BusinessException;
 import com.junolabs.usm.model.Account;
 import com.junolabs.usm.persistence.dao.AccountDAO;
+import com.junolabs.usm.persistence.dao.IConnectionManager;
 import com.junolabs.usm.persistence.dao.TransactionManagerDAO;
 import com.junolabs.usm.support.TransactionManager;
 
@@ -60,11 +61,10 @@ public class AccountMySQLDAO extends AccountDAO {
 		return null;
 	}
 
-	public Account create(Account account) throws Exception {
+	public Account create(Account account) {
 		try {
 			TransactionManagerDAO transactionManagerDAO = TransactionManager.getInstance();
-			Connection conn = transactionManagerDAO.getConnection();
-			
+			IConnectionManager conn = transactionManagerDAO.getConnectionManager();
 			
 			PreparedStatement ps = conn.prepareStatement("insert into accounts (NAME, PASSWORD, USER) values (?,?,?)", PreparedStatement.RETURN_GENERATED_KEYS);
 			
@@ -86,7 +86,9 @@ public class AccountMySQLDAO extends AccountDAO {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			throw new Exception();
+			throw new BusinessException(e.getMessage());
+		} finally {
+			
 		}
 	}
 

@@ -1,7 +1,7 @@
 package com.junolabs.usm.persistence.dao.postgres;
 
 import com.junolabs.usm.persistence.dao.AccountDAO;
-import com.junolabs.usm.persistence.dao.ConnectionManager;
+import com.junolabs.usm.persistence.dao.IConnectionManager;
 import com.junolabs.usm.persistence.dao.FactoryDAO;
 import com.junolabs.usm.persistence.dao.UserDAO;
 
@@ -30,8 +30,8 @@ public class FactoryPostgresDAO extends FactoryDAO {
     
     // --- -------- ---
     
-	public ConnectionManager getConnectionManager() {
-		return ConnectionManagerPostgres.getInstance();
+	public IConnectionManager getConnectionManager() {
+		return new ConnectionManagerPostgres();
 	}
     
 	public UserDAO getUserDAO() {
