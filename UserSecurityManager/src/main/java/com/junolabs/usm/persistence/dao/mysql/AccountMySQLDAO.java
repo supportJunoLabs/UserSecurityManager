@@ -11,8 +11,6 @@ import com.junolabs.usm.exceptions.BusinessException;
 import com.junolabs.usm.model.Account;
 import com.junolabs.usm.persistence.dao.AccountDAO;
 import com.junolabs.usm.persistence.dao.IConnectionManager;
-import com.junolabs.usm.persistence.dao.TransactionManagerDAO;
-import com.junolabs.usm.support.TransactionManager;
 
 public class AccountMySQLDAO extends AccountDAO {
 
@@ -20,7 +18,9 @@ public class AccountMySQLDAO extends AccountDAO {
 	
 	private static AccountMySQLDAO INSTANCE = null;
 	 
-    private AccountMySQLDAO() {}
+    private AccountMySQLDAO() {
+    	super();
+    }
  
     private synchronized static void createInstance() {
         if (INSTANCE == null) { 
@@ -63,7 +63,6 @@ public class AccountMySQLDAO extends AccountDAO {
 
 	public Account create(Account account) {
 		try {
-			TransactionManagerDAO transactionManagerDAO = TransactionManager.getInstance();
 			IConnectionManager conn = transactionManagerDAO.getConnectionManager();
 			
 			PreparedStatement ps = conn.prepareStatement("insert into accounts (NAME, PASSWORD, USER) values (?,?,?)", PreparedStatement.RETURN_GENERATED_KEYS);

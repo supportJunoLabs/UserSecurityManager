@@ -11,8 +11,6 @@ import com.junolabs.usm.exceptions.BusinessException;
 import com.junolabs.usm.model.Account;
 import com.junolabs.usm.persistence.dao.AccountDAO;
 import com.junolabs.usm.persistence.dao.IConnectionManager;
-import com.junolabs.usm.persistence.dao.TransactionManagerDAO;
-import com.junolabs.usm.support.TransactionManager;
 
 public class AccountPostgresDAO extends AccountDAO {
 
@@ -20,7 +18,9 @@ public class AccountPostgresDAO extends AccountDAO {
 	
 	private static AccountPostgresDAO INSTANCE = null;
 	 
-    private AccountPostgresDAO() {}
+    private AccountPostgresDAO() {
+    	super();
+    }
  
     private synchronized static void createInstance() {
         if (INSTANCE == null) { 
@@ -63,10 +63,8 @@ public class AccountPostgresDAO extends AccountDAO {
 
 	public Account create(Account account) {
 		try {
-			TransactionManagerDAO transactionManagerDAO = TransactionManager.getInstance();
 			IConnectionManager conn = transactionManagerDAO.getConnectionManager();
-			
-			
+
 			PreparedStatement ps = conn.prepareStatement("insert into \"ACCOUNTS\" (\"NAME\", \"PASSWORD\", \"USER\") values (?,?,?)", PreparedStatement.RETURN_GENERATED_KEYS);
 			
 			ps.setString(1, account.getName());

@@ -9,9 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.junolabs.usm.model.User;
 import com.junolabs.usm.persistence.dao.IConnectionManager;
-import com.junolabs.usm.persistence.dao.TransactionManagerDAO;
 import com.junolabs.usm.persistence.dao.UserDAO;
-import com.junolabs.usm.support.TransactionManager;
 
 public class UserPostgresDAO extends UserDAO {
 	
@@ -19,7 +17,9 @@ public class UserPostgresDAO extends UserDAO {
 	
 	private static UserPostgresDAO INSTANCE = null;
 	 
-    private UserPostgresDAO() {}
+    private UserPostgresDAO() {
+    	super();
+    }
  
     private synchronized static void createInstance() {
         if (INSTANCE == null) { 
@@ -64,9 +64,7 @@ public class UserPostgresDAO extends UserDAO {
 
 	public User create(User user) throws Exception {
 		try {
-			TransactionManagerDAO transactionManagerDAO = TransactionManager.getInstance();
 			IConnectionManager conn = transactionManagerDAO.getConnectionManager();
-			
 			
 			PreparedStatement ps = conn.prepareStatement("INSERT INTO \"USERS\" (\"FIRST_NAME\", \"LAST_NAME\", \"EMAIL\", \"BIRTH_DATE\") VALUES (?,?,?,?)", PreparedStatement.RETURN_GENERATED_KEYS);
 			

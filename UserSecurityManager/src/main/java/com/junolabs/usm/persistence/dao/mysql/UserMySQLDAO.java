@@ -10,9 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import com.junolabs.usm.exceptions.BusinessException;
 import com.junolabs.usm.model.User;
 import com.junolabs.usm.persistence.dao.IConnectionManager;
-import com.junolabs.usm.persistence.dao.TransactionManagerDAO;
 import com.junolabs.usm.persistence.dao.UserDAO;
-import com.junolabs.usm.support.TransactionManager;
 
 public class UserMySQLDAO extends UserDAO {
 	
@@ -20,7 +18,9 @@ public class UserMySQLDAO extends UserDAO {
 	
 	private static UserMySQLDAO INSTANCE = null;
 	 
-    private UserMySQLDAO() {}
+    private UserMySQLDAO() {
+    	super();
+    }
  
     private synchronized static void createInstance() {
         if (INSTANCE == null) { 
@@ -65,9 +65,7 @@ public class UserMySQLDAO extends UserDAO {
 
 	public User create(User user) {
 		try {
-			TransactionManagerDAO transactionManagerDAO = TransactionManager.getInstance();
 			IConnectionManager conn = transactionManagerDAO.getConnectionManager();
-			
 			
 			PreparedStatement ps = conn.prepareStatement("insert into users (FIRST_NAME, LAST_NAME, EMAIL, BIRTH_DATE) values (?,?,?,?)", PreparedStatement.RETURN_GENERATED_KEYS);
 			
