@@ -11,8 +11,15 @@ import com.junolabs.usm.exceptions.BusinessException;
 import com.junolabs.usm.model.User;
 import com.junolabs.usm.persistence.dao.IConnectionManager;
 import com.junolabs.usm.persistence.dao.UserDAO;
+import com.junolabs.usm.persistence.dao.mysql.support.MySQLUtils;
 
 public class UserMySQLDAO extends UserDAO {
+	
+	private static final String FIRST_NAME = "FIRST_NAME";
+	private static final String LAST_NAME = "LAST_NAME";
+	private static final String EMAIL = "EMAIL";
+	private static final String BIRTH_DATE = "BIRTH_DATE";
+	private static final String USERS = "users";
 	
 	// --- Singleton ---
 	
@@ -67,7 +74,8 @@ public class UserMySQLDAO extends UserDAO {
 		try {
 			IConnectionManager conn = transactionManagerDAO.getConnectionManager();
 			
-			PreparedStatement ps = conn.prepareStatement("insert into users (FIRST_NAME, LAST_NAME, EMAIL, BIRTH_DATE) values (?,?,?,?)", PreparedStatement.RETURN_GENERATED_KEYS);
+			String strInsert = MySQLUtils.prepareInsert(USERS, FIRST_NAME, LAST_NAME, EMAIL, BIRTH_DATE);
+			PreparedStatement ps = conn.prepareStatement(strInsert, PreparedStatement.RETURN_GENERATED_KEYS);
 			
 			ps.setString(1, user.getFirstName());
 			ps.setString(2, user.getLastName());
