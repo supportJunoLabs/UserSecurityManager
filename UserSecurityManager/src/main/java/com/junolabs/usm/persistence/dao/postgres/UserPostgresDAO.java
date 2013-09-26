@@ -57,7 +57,7 @@ public class UserPostgresDAO extends UserDAO {
 		return null;
 	}
 
-	public List<User> getAll(HttpServletRequest request) {
+	public List<User> getAll() {
 		// TODO Auto-generated method stub
 		return null;
 	}

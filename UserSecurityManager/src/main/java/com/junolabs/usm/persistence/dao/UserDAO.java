@@ -11,7 +11,7 @@ public abstract class UserDAO extends AbstractDAO  {
 	public abstract User getById(long id);
 	public abstract User getByEmail(String email);
 	public abstract User getByAccountName(String email);
-	public abstract List<User> getAll(HttpServletRequest request);
+	public abstract List<User> getAll();
 	
 	public abstract User create(User user) throws Exception;
 	public abstract User update(User user);
