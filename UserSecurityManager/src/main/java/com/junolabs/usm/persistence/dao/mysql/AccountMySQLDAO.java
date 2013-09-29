@@ -12,13 +12,11 @@ import com.junolabs.usm.model.Account;
 import com.junolabs.usm.persistence.dao.AccountDAO;
 import com.junolabs.usm.persistence.dao.IConnectionManager;
 import com.junolabs.usm.persistence.dao.mysql.support.MySQLUtils;
+import com.junolabs.usm.persistence.dao.mysql.support.SQLSchema;
 
 public class AccountMySQLDAO extends AccountDAO {
 
-	private static final String NAME = "NAME";
-	private static final String PASSWORD = "PASSWORD";
-	private static final String USER = "USER";
-	private static final String ACCOUNTS = "accounts";
+	
 	
 	// --- Singleton ---
 	
@@ -71,7 +69,7 @@ public class AccountMySQLDAO extends AccountDAO {
 		try {
 			IConnectionManager conn = transactionManagerDAO.getConnectionManager();
 			
-			String strInsert = MySQLUtils.prepareInsert(ACCOUNTS, NAME, PASSWORD, USER);
+			String strInsert = MySQLUtils.prepareInsert(SQLSchema.TABLE_ACCOUNTS, SQLSchema.ACCOUNTS_NAME, SQLSchema.ACCOUNTS_PASSWORD, SQLSchema.ACCOUNTS_USER);
 			PreparedStatement ps = conn.prepareStatement(strInsert, PreparedStatement.RETURN_GENERATED_KEYS);
 			
 			ps.setString(1, account.getName());
