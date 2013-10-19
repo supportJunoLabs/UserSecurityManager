@@ -85,7 +85,7 @@ public class AccountPostgresDAO extends AccountDAO {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			throw new BusinessException(e.getMessage());
+			throw new BusinessException(e);
 		} finally {
 			
 		}

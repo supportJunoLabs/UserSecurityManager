@@ -19,14 +19,14 @@ public class ConnectionManagerMySQL extends ConnectionManager {
 			Class.forName("com.mysql.jdbc.Driver");
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
-			throw new BusinessException(e.getMessage());
+			throw new BusinessException(e);
 		} 
 	    
 	    try {
 			this.connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/usm", connectionProps);
 		} catch (SQLException e) {
 			e.printStackTrace();
-			throw new BusinessException(e.getMessage());
+			throw new BusinessException(e);
 		}
 
 	}

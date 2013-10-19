@@ -12,6 +12,7 @@ import com.junolabs.usm.model.User;
 import com.junolabs.usm.persistence.dao.IConnectionManager;
 import com.junolabs.usm.persistence.dao.UserDAO;
 import com.junolabs.usm.persistence.dao.mysql.support.MySQLUtils;
+import com.junolabs.usm.persistence.dao.mysql.support.PersistenceError;
 
 public class UserMySQLDAO extends UserDAO {
 	
@@ -69,7 +70,7 @@ public class UserMySQLDAO extends UserDAO {
 			return user;
 		} catch (SQLException e) {
 			e.printStackTrace();
-			throw new BusinessException(e.getMessage());
+			throw new BusinessException(e);
 		}
 	}
 	
@@ -93,7 +94,7 @@ public class UserMySQLDAO extends UserDAO {
 			return user;
 		} catch (SQLException e) {
 			e.printStackTrace();
-			throw new BusinessException(e.getMessage());
+			throw new BusinessException(e);
 		}
 	}
 	
@@ -125,7 +126,7 @@ public class UserMySQLDAO extends UserDAO {
 			return users;
 		} catch (SQLException e) {
 			e.printStackTrace();
-			throw new BusinessException(e.getMessage());
+			throw new BusinessException(e);
 		}
 	}
 	
@@ -156,7 +157,7 @@ public class UserMySQLDAO extends UserDAO {
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
-			throw new BusinessException(e.getMessage());
+			throw new BusinessException(e);
 		}
 	}
 
@@ -193,7 +194,7 @@ public class UserMySQLDAO extends UserDAO {
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
-			throw new BusinessException(e.getMessage());
+			throw new BusinessException(e);
 		}
 	}
 
@@ -211,12 +212,12 @@ public class UserMySQLDAO extends UserDAO {
 			int result = ps.executeUpdate();
 			
 			if (result == 0){
-				throw new BusinessException("No se pudo eliminar Usuario con id " + id);
+				throw new BusinessException("No se pudo eliminar Usuario con id " + id, PersistenceError.ERROR_DELETE);
 			}
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
-			throw new BusinessException(e.getMessage());
+			throw new BusinessException(e);
 		}
 	}
     

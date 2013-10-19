@@ -60,9 +60,9 @@ public class TransactionManager implements TransactionManagerService, Transactio
 				this.mapDAOManager.get(idCurrentTread).setAutoCommit(true);
 			} catch (SQLException e2) {
 				e2.printStackTrace();
-				throw new BusinessException(e2.getMessage());
+				throw new BusinessException(e2);
 			}
-			throw new BusinessException(e1.getMessage());
+			throw new BusinessException(e1);
 		}
     }
     
@@ -74,14 +74,14 @@ public class TransactionManager implements TransactionManagerService, Transactio
     		this.mapDAOManager.get(idCurrentTread).commit();
 		} catch (SQLException e) {
 			e.printStackTrace();
-			throw new BusinessException(e.getMessage());
+			throw new BusinessException(e);
 		}
     	finally{
     		try {
 				this.mapDAOManager.get(idCurrentTread).setAutoCommit(true);
 			} catch (SQLException e) {
 				e.printStackTrace();
-				throw new BusinessException(e.getMessage());
+				throw new BusinessException(e);
 			}
     	}
     }
@@ -94,14 +94,14 @@ public class TransactionManager implements TransactionManagerService, Transactio
     		this.mapDAOManager.get(idCurrentTread).rollback();
 		} catch (SQLException e) {
 			e.printStackTrace();
-			throw new BusinessException(e.getMessage());
+			throw new BusinessException(e);
 		}
     	finally{
     		try {
 				this.mapDAOManager.get(idCurrentTread).setAutoCommit(true);
 			} catch (SQLException e) {
 				e.printStackTrace();
-				throw new BusinessException(e.getMessage());
+				throw new BusinessException(e);
 			}
     	}
     }
@@ -115,7 +115,7 @@ public class TransactionManager implements TransactionManagerService, Transactio
 			this.mapDAOManager.remove(idCurrentTread);
 		} catch (SQLException e) {
 			e.printStackTrace();
-			throw new BusinessException(e.getMessage());
+			throw new BusinessException(e);
 		}
     }
 

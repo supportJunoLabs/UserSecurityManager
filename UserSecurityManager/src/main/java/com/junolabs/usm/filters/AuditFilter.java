@@ -23,8 +23,8 @@ public class AuditFilter implements Filter {
 	}
 
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-		PrintWriter printWriter = response.getWriter();
-		printWriter.println("Init AuditFilter...");
+		//PrintWriter printWriter = response.getWriter();
+		//printWriter.println("Init AuditFilter...");
 
 		// Time and log the subsequent processing
 		long start = System.currentTimeMillis();
@@ -34,8 +34,8 @@ public class AuditFilter implements Filter {
 		
 		long end = System.currentTimeMillis();
 		
-		printWriter = response.getWriter();
-		printWriter.println("End AuditFilter... -> Start: " + start + " | End: " + end);
+		//printWriter = response.getWriter();
+		//printWriter.println("End AuditFilter... -> Start: " + start + " | End: " + end);
 
 	}
 
