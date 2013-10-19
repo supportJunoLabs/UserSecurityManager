@@ -13,15 +13,11 @@ import com.junolabs.usm.persistence.dao.IConnectionManager;
 import com.junolabs.usm.persistence.dao.UserDAO;
 import com.junolabs.usm.persistence.dao.mysql.support.MySQLUtils;
 import com.junolabs.usm.persistence.dao.mysql.support.PersistenceError;
+import com.junolabs.usm.persistence.dao.mysql.support.SQLSchema;
 
 public class UserMySQLDAO extends UserDAO {
 	
-	private static final String ID = "ID";
-	private static final String FIRST_NAME = "FIRST_NAME";
-	private static final String LAST_NAME = "LAST_NAME";
-	private static final String EMAIL = "EMAIL";
-	private static final String BIRTH_DATE = "BIRTH_DATE";
-	private static final String USERS = "users";
+	
 	
 	// --- Singleton ---
 	
@@ -56,7 +52,7 @@ public class UserMySQLDAO extends UserDAO {
 		try {
 			IConnectionManager conn = transactionManagerDAO.getConnectionManager();
 			
-			String strSelect = "select * from " + USERS + "where " + ID + "=" + id;
+			String strSelect = "select * from " + SQLSchema.TABLE_USERS + "where " + SQLSchema.USERS_ID + "=" + id;
 			PreparedStatement ps = conn.prepareStatement(strSelect);
 			ResultSet rs = ps.executeQuery();
 			
@@ -80,7 +76,7 @@ public class UserMySQLDAO extends UserDAO {
 		try {
 			IConnectionManager conn = transactionManagerDAO.getConnectionManager();
 			
-			String strSelect = "select * from " + USERS + "where " + EMAIL + "=" + email;
+			String strSelect = "select * from " + SQLSchema.TABLE_USERS + "where " + SQLSchema.USERS_EMAIL + "=" + email;
 			PreparedStatement ps = conn.prepareStatement(strSelect);
 			ResultSet rs = ps.executeQuery();
 			
@@ -101,8 +97,26 @@ public class UserMySQLDAO extends UserDAO {
 	//-----------------------------------------------------------------------------------------------------------
 
 	public User getByAccountName(String accountName) {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			IConnectionManager conn = transactionManagerDAO.getConnectionManager();
+			
+			String strSelect = "select * from " + SQLSchema.TABLE_USERS + ", " + SQLSchema.TABLE_ACCOUNTS + 
+					          " where (" + SQLSchema.USERS_ID + " = " + SQLSchema.ACCOUNTS_USER + ") AND (" + SQLSchema.ACCOUNTS_NAME + "=" + accountName + ")";
+			PreparedStatement ps = conn.prepareStatement(strSelect);
+			ResultSet rs = ps.executeQuery();
+			
+			User user = null;
+			
+			while (rs.next()) {
+				user = new User();
+				populateUser(user, rs);
+			}
+			
+			return user;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new BusinessException(e.getMessage());
+		}
 	}
 
 	//-----------------------------------------------------------------------------------------------------------
@@ -111,7 +125,7 @@ public class UserMySQLDAO extends UserDAO {
 		try {
 			IConnectionManager conn = transactionManagerDAO.getConnectionManager();
 			
-			String strSelect = "select * from " + USERS;
+			String strSelect = "select * from " + SQLSchema.TABLE_USERS;
 			PreparedStatement ps = conn.prepareStatement(strSelect);
 			ResultSet rs = ps.executeQuery();
 			
@@ -136,7 +150,7 @@ public class UserMySQLDAO extends UserDAO {
 		try {
 			IConnectionManager conn = transactionManagerDAO.getConnectionManager();
 			
-			String strInsert = MySQLUtils.prepareInsert(USERS, FIRST_NAME, LAST_NAME, EMAIL, BIRTH_DATE);
+			String strInsert = MySQLUtils.prepareInsert(SQLSchema.TABLE_USERS, SQLSchema.USERS_FIRST_NAME, SQLSchema.USERS_LAST_NAME, SQLSchema.USERS_EMAIL, SQLSchema.USERS_BIRTH_DATE);
 			PreparedStatement ps = conn.prepareStatement(strInsert, PreparedStatement.RETURN_GENERATED_KEYS);
 			
 			ps.setString(1, user.getFirstName());
@@ -168,12 +182,12 @@ public class UserMySQLDAO extends UserDAO {
 			IConnectionManager conn = transactionManagerDAO.getConnectionManager();
 			
 			HashMap<String, Object> mapColumnValue = new HashMap<String, Object>();
-			mapColumnValue.put(FIRST_NAME, user.getFirstName());
-			mapColumnValue.put(LAST_NAME, user.getLastName());
-			mapColumnValue.put(EMAIL, user.getEmail());
-			mapColumnValue.put(BIRTH_DATE, MySQLUtils.getStringDate(user.getBirthDate()));
+			mapColumnValue.put(SQLSchema.USERS_FIRST_NAME, user.getFirstName());
+			mapColumnValue.put(SQLSchema.USERS_LAST_NAME, user.getLastName());
+			mapColumnValue.put(SQLSchema.USERS_EMAIL, user.getEmail());
+			mapColumnValue.put(SQLSchema.USERS_BIRTH_DATE, MySQLUtils.getStringDate(user.getBirthDate()));
 			
-			String strUpdate = MySQLUtils.prepareUpdate(USERS,  user.getId(), FIRST_NAME, LAST_NAME, EMAIL, BIRTH_DATE);
+			String strUpdate = MySQLUtils.prepareUpdate(SQLSchema.TABLE_USERS,  user.getId(), SQLSchema.USERS_FIRST_NAME, SQLSchema.USERS_LAST_NAME, SQLSchema.USERS_EMAIL, SQLSchema.USERS_BIRTH_DATE);
 			PreparedStatement ps = conn.prepareStatement(strUpdate, PreparedStatement.RETURN_GENERATED_KEYS);
 			
 			ps.setString(1, user.getFirstName());
@@ -204,7 +218,7 @@ public class UserMySQLDAO extends UserDAO {
 		try {
 			IConnectionManager conn = transactionManagerDAO.getConnectionManager();
 			
-			String strInsert = MySQLUtils.prepareDelete(USERS);
+			String strInsert = MySQLUtils.prepareDelete(SQLSchema.TABLE_USERS);
 			PreparedStatement ps = conn.prepareStatement(strInsert, PreparedStatement.RETURN_GENERATED_KEYS);
 			
 			ps.setLong(1, id);
@@ -226,11 +240,11 @@ public class UserMySQLDAO extends UserDAO {
 	
 	private void populateUser(User user, ResultSet rs) throws SQLException{
 		user = new User();
-		user.setId(rs.getLong(ID));
-		user.setFirstName(rs.getString(FIRST_NAME));
-		user.setLastName(rs.getString(LAST_NAME));
-		user.setEmail(rs.getString(EMAIL));
-		user.setBirthDate(rs.getDate(BIRTH_DATE));
+		user.setId(rs.getLong(SQLSchema.USERS_ID));
+		user.setFirstName(rs.getString(SQLSchema.USERS_FIRST_NAME));
+		user.setLastName(rs.getString(SQLSchema.USERS_LAST_NAME));
+		user.setEmail(rs.getString(SQLSchema.USERS_EMAIL));
+		user.setBirthDate(rs.getDate(SQLSchema.USERS_BIRTH_DATE));
 	}
 	
 	//-----------------------------------------------------------------------------------------------------------
