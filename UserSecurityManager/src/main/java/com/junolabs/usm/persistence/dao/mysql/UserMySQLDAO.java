@@ -115,7 +115,7 @@ public class UserMySQLDAO extends UserDAO {
 			return user;
 		} catch (SQLException e) {
 			e.printStackTrace();
-			throw new BusinessException(e.getMessage());
+			throw new BusinessException(e);
 		}
 	}
 
