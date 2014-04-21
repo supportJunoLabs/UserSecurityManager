@@ -40,7 +40,7 @@ public class UserController extends CRUDController {
 		user.setEmail("a@b.com");
 		
 		Account account = new Account();
-		account.setName("lcarrasco");
+		account.setName("lcarrasco2");
 		account.setPassword("abc123");
 		account.setUser(user);
 		
